@@ -1,0 +1,275 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 0 0% 4%;
+  --surface: 0 0% 8%;
+  --text: 0 0% 96%;
+  --muted: 0 0% 53%;
+  --stroke: 0 0% 12%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: hsl(var(--bg));
+  color: hsl(var(--text));
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid #89aacc;
+  outline-offset: 3px;
+}
+
+.accent-gradient {
+  background: linear-gradient(90deg, #89aacc 0%, #4e85bf 100%);
+}
+
+.accent-text {
+  background: linear-gradient(90deg, #89aacc, #4e85bf);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Pill with a gradient ring that fades in on hover */
+.grad-border {
+  position: relative;
+  border-radius: 9999px;
+}
+.grad-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #89aacc, #4e85bf);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.grad-border:hover::before,
+.grad-border:focus-within::before {
+  opacity: 1;
+}
+
+.ghost-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  border: 1px solid hsl(var(--stroke));
+  border-radius: 9999px;
+  background: transparent;
+  color: hsl(var(--muted));
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    color 0.3s,
+    border-color 0.3s;
+}
+.ghost-btn:hover {
+  color: hsl(var(--text));
+  border-color: #89aacc;
+}
+
+.text-btn {
+  background: none;
+  color: hsl(var(--muted));
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.text-btn:hover {
+  color: hsl(var(--text));
+}
+
+/* Navbar items: smaller on phones so the pill fits a 360px screen */
+.nav-item,
+.nav-cta {
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    background 0.2s;
+}
+.nav-item {
+  background: transparent;
+  color: hsl(var(--muted));
+}
+.nav-item:hover,
+.nav-item[data-active='true'] {
+  background: hsl(var(--stroke) / 0.6);
+  color: hsl(var(--text));
+}
+.nav-cta {
+  position: relative;
+  background: hsl(var(--surface));
+  color: hsl(var(--text));
+}
+@media (min-width: 640px) {
+  .nav-item,
+  .nav-cta {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
+
+/* Project cards: one column on phones, 12-column grid from tablet up */
+.bento {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+.bento-card {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: var(--ratio, 4 / 3);
+  border: 1px solid hsl(var(--stroke));
+  border-radius: 24px;
+  text-decoration: none;
+}
+@media (min-width: 768px) {
+  .bento {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .bento-card {
+    grid-column: span var(--span, 6);
+    /* cards in the same row end up the same height; the taller one sets it.
+       Explicit width, otherwise the stretched height gets turned into a width via aspect-ratio. */
+    align-self: stretch;
+    width: 100%;
+  }
+}
+
+.card-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.bento-card:hover .card-image,
+.bento-card:focus-visible .card-image {
+  transform: scale(1.04);
+}
+
+.card-label {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 20px 20px 16px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.5) 60%, transparent);
+}
+
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px;
+  text-align: center;
+  background: rgba(10, 10, 10, 0.88);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.bento-card:hover .card-overlay,
+.bento-card:focus-visible .card-overlay,
+.bento-card:focus-within .card-overlay {
+  opacity: 1;
+}
+
+@keyframes role-fade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes scroll-down {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(200%);
+  }
+}
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.8);
+  }
+}
+@keyframes blink-cursor {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes photo-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--bg));
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(#89aacc, #4e85bf);
+  border-radius: 2px;
+}
